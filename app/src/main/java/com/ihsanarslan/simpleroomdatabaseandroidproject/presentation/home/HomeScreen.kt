@@ -1,6 +1,7 @@
 package com.ihsanarslan.simpleroomdatabaseandroidproject.presentation.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,11 +23,16 @@ fun HomeScreen(){
     val viewModel : HomeViewModel = viewModel()
     val notes = viewModel.notes.observeAsState(emptyList())
 
+    val id = remember { mutableStateOf("") }
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
 
     Column {
         Spacer(modifier = Modifier.height(50.dp))
+        TextField(
+            value = id.value,
+            onValueChange = { id.value = it }
+        )
         TextField(
             value = title.value,
             onValueChange = { title.value = it }
@@ -35,22 +41,50 @@ fun HomeScreen(){
             value = description.value,
             onValueChange = { description.value = it }
         )
-        Button(
-            onClick = {
-                val noteEntity = NoteEntity(
-                    title = title.value,
-                    description = description.value
-                )
-                viewModel.insert(noteEntity = noteEntity)
+        if (id.value == "") {
+            Button(
+                onClick = {
+                    val noteEntity = NoteEntity(
+                        title = title.value,
+                        description = description.value
+                    )
+                    viewModel.insert(noteEntity = noteEntity)
+                }
+            ) {
+                Text("Notu kaydet")
             }
-        ) {
-            Text("Notu kaydet")
+        }else{
+            Button(
+                onClick = {
+                    val noteEntity = NoteEntity(
+                        id = id.value.toInt(),
+                        title = title.value,
+                        description = description.value
+                    )
+                    viewModel.update(noteEntity = noteEntity)
+                }
+            ) {
+                Text("Notu güncelle")
+            }
         }
 
         LazyColumn {
             items(notes.value.size){ index ->
-                Text(text = notes.value[index].title)
+                Row {
+                    Text(text = notes.value[index].title)
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = {
+//                            viewModel.delete(noteEntity = notes.value[index])
+                            viewModel.deleteById(id = notes.value[index].id)
+                        }
+                    ) {
+                        Text("sil")
+                    }
+                }
             }
         }
+
+
     }
 }

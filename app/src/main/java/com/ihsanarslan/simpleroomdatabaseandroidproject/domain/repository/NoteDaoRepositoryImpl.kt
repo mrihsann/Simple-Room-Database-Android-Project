@@ -14,4 +14,17 @@ class NoteDaoRepositoryImpl(private val noteDao: NoteDao) {
         return noteDao.getAllNotes()
     }
 
+    suspend fun deleteNote(noteEntity : NoteEntity) {
+        noteDao.deleteNote(noteEntity = noteEntity)
+    }
+
+    suspend fun deleteNoteById(id : Int) {
+        noteDao.deleteNoteById(id = id)
+    }
+
+    suspend fun updateNote(noteEntity: NoteEntity) {
+        noteDao.updateNote(noteEntity = noteEntity)
+    }
+
+
 }

@@ -31,4 +31,22 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.insertNote(noteEntity = noteEntity)
         }
     }
+
+    fun delete(noteEntity: NoteEntity){
+        viewModelScope.launch {
+            repository.deleteNote(noteEntity = noteEntity)
+        }
+    }
+
+    fun deleteById(id : Int){
+        viewModelScope.launch {
+            repository.deleteNoteById(id = id)
+        }
+    }
+
+    fun update(noteEntity: NoteEntity){
+        viewModelScope.launch {
+            repository.updateNote(noteEntity = noteEntity)
+        }
+    }
 }
